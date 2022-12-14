@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 //implementation of functions
 void input_array(int *tab, int *size){
     int i;
@@ -37,6 +38,7 @@ void print_array(int *tab, int size){
     printf("\n");
 }
 //find a value x in an array (sorted or not)
+//complexity: O(n)
 int find(int *tab, int size, int x){
     int i;
     while(i<size && tab[i]!=x){
@@ -49,21 +51,51 @@ int find(int *tab, int size, int x){
 }
 //find a value x in a sorted array
 //dichotomy search algorithm
-int find_in_sorted_array(int *tab, int size, int x){
 
+int find_in_sorted_array(int *tab, int size, int x){
+int start=0, end=size-1, middle,find=-1;
+while(start<=end && find==-1){
+    middle=(start+end)/2;
+    if(tab[middle]==x)
+        find=middle;
+    if(x>tab[middle])
+        start=middle+1;
+    else
+        end=middle-1;
+    }
+    return find;
 }
 int main() {
     int tab[100],size,x;
-    printf("Introduce a sorted array.\n");
-    //input_sorted_array(tab, &size);
+    //find a value in an array
+    printf("Introduce an array.\n");
     input_array(tab, &size);
     print_array(tab, size);
     printf("Enter the integer to find :\t");
     scanf("%d",&x);
+    int time1=clock();
     int index=find(tab, size, x);
+    int time2=clock();
     if(index==-1)
         printf("The value %d was not found.\n", x);
     else
         printf("The value %d was found at index %d.\n", x, index);
+
+    printf("The time taken by the sequential version is %d ms.\n", time2-time1);
+
+    //find in a sorted array
+    printf("Introduce a sorted array.\n");
+    input_sorted_array(tab, &size);
+    print_array(tab, size);
+    printf("Enter the integer to find :\t");
+    scanf("%d",&x);
+    time1=clock();
+    index=find_in_sorted_array(tab, size, x);
+    time2=clock();
+    if(index==-1)
+        printf("The value %d was not found.\n", x);
+    else
+        printf("The value %d was found at index %d.\n", x, index);
+    printf("The time taken by the dichotomy version is %d ms.\n", time2-time1);
     return 0;
 }
