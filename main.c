@@ -1,5 +1,8 @@
 #include <stdio.h>
-#include <time.h>
+#include <time.h> // for time() or clock()
+#include <stdlib.h> // for rand()
+#define SIZE_MAX 10000 // max size of array as constant
+
 //implementation of functions
 void input_array(int *tab, int *size){
     int i;
@@ -65,11 +68,39 @@ while(start<=end && find==-1){
     }
     return find;
 }
+//generate a random array with values between 0 and 100
+void generate_random_array(int *tab, int size){
+    int i;
+    srand(time(NULL));
+    for(i=0; i<size; i++){
+        tab[i]=rand()%101;
+    }
+}
+void generate_random_sorted_array(int *tab, int size){
+    int i;
+    srand(time(NULL));
+    tab[0]=rand()%101;
+    for(i=1; i<size; i++){
+        do {
+            tab[i] = rand() % 101;
+        }while(tab[i]<tab[i-1]);
+    }
+}
 int main() {
-    int tab[100],size,x;
+    int tab[SIZE_MAX],size,x,value;
+//    srand(time(NULL));//to get different values each time we call rand() function
+//    value=rand()%100;//generate a random value between 0 and 99
+//    //value=a+rand()%(b-a+1);//generate a random value between a and b
+//    printf("The value is: %d", value);
+//    getchar();
     //find a value in an array
-    printf("Introduce an array.\n");
-    input_array(tab, &size);
+    //printf("Introduce an array.\n");
+    //input_array(tab, &size);
+    do {
+        printf("Enter the size of the array: ");
+        scanf("%d", &size);
+    } while(size<0 || size>SIZE_MAX);
+    generate_random_array(tab, size);
     print_array(tab, size);
     printf("Enter the integer to find :\t");
     scanf("%d",&x);
@@ -85,7 +116,13 @@ int main() {
 
     //find in a sorted array
     printf("Introduce a sorted array.\n");
-    input_sorted_array(tab, &size);
+    //input_sorted_array(tab, &size);
+    do {
+        printf("Enter the size of the array: ");
+
+        scanf("%d", &size);
+    }while(size<0 ||size>SIZE_MAX);
+    generate_random_sorted_array(tab, size);
     print_array(tab, size);
     printf("Enter the integer to find :\t");
     scanf("%d",&x);
